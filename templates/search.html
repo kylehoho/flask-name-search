@@ -14,7 +14,7 @@
         {% if results.empty %}
         <p>未找到相关结果。</p>
         {% else %}
-        <table>
+        <table class="result-table">
             <thead>
                 <tr>
                     <th>姓名</th>
@@ -35,7 +35,7 @@
             </tbody>
         </table>
         {% endif %}
-        <a href="{{ url_for('index') }}">返回搜索页面</a>
+        <a href="{{ url_for('index') }}" class="back-link">返回搜索页面</a>
     </div>
 </body>
 
