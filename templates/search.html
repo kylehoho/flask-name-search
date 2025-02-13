@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>姓名搜索</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        <label for="keyword">请输入要搜索的姓名：</label>
+        <input type="text" id="keyword" name="keyword" placeholder="输入姓名">
+        <input type="submit" value="搜索">
+    </form>
+    <h1>搜索结果</h1>
+    {% if result and result != "请输入搜索关键词。" and result != "未找到相关结果。" %}
+        <table>
+            {% for row in result %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>
