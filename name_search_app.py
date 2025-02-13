@@ -1,34 +1,38 @@
-﻿from flask import Flask, render_template, request
-import pandas as pd
-import os
+﻿import pandas as pd
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
-print(os.path.abspath(app.template_folder))
 
-# 验证 search.html 文件是否存在
-template_path = os.path.join(app.template_folder, 'search.html')
-if os.path.exists(template_path):
-    print("search.html 文件存在")
-else:
-    print("search.html 文件不存在")
 
-# 读取 Excel 文件
-file_path = '数据表1.xlsx'
-df = pd.read_excel(file_path)
+def load_data():
+    try:
+        df = pd.read_excel('C:\\Users\\DELL\\Desktop\\2025年会\\数据表1.xlsx')
+        print('数据全部内容信息：')
+        print(df.to_csv(sep='\t', na_rep='nan'))
+        data = df.values.flatten().tolist()
+        return data
+    except FileNotFoundError:
+        print('C:\\Users\\DELL\\Desktop\\2025年会\\数据表1.xlsx 文件未找到')
+        return []
 
-@app.route('/search', methods=['GET', 'POST'])
+
+table_data = load_data()
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/search')
 def search():
-    if request.method == 'POST':
-        keyword = request.form.get('keyword')
-        result = df[df['姓名'].str.contains(keyword, na=False)]
-        if not result.empty:
-            # 将结果转换为列表的列表，方便在 HTML 中使用
-            result = [result.columns.tolist()] + result.values.tolist()
-        else:
-            result = "未找到相关结果。"
-    else:
-        result = "请输入搜索关键词。"
-    return render_template('search.html', result=result)
+    query = request.args.get('name')
+    global table_data
+    print('当前使用的 table_data:', table_data)
+    results = [name for name in table_data if query.lower() in name.lower()]
+    print('搜索结果 results:', results)
+    return render_template('index.html', results=results)
+
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5001)
+    app.run(debug=True)
