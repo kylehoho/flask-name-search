@@ -1,42 +1,42 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>姓名搜索</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <form method="post">
-        <label for="keyword">请输入要搜索的姓名：</label>
-        <input type="text" id="keyword" name="keyword" placeholder="输入姓名">
-        <input type="submit" value="搜索">
-    </form>
-    <h1>搜索结果</h1>
-    {% if result and result != "请输入搜索关键词。" and result != "未找到相关结果。" %}
-        <table>
-            {% for row in result %}
-                <tr>
-                    {% for cell in row %}
-                        <td>{{ cell }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>{{ result }}</p>
-    {% endif %}
-</body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>搜索结果</h1>
+        {% if results.empty %}
+        <p>未找到相关结果。</p>
+        {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>出发日期</th>
+                    <th>出发时间</th>
+                    <th>班次</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in results.iterrows() %}
+                <tr>
+                    <td>{{ row['姓名'] }}</td>
+                    <td>{{ row['出发日期'] }}</td>
+                    <td>{{ row['出发时间'] }}</td>
+                    <td>{{ row['班次'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        <a href="{{ url_for('index') }}">返回搜索页面</a>
+    </div>
+</body>
+
 </html>
